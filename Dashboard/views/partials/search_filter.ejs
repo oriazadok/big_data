@@ -1,0 +1,38 @@
+<div class="content">
+    <form>
+    
+        <label for="start-date">Branch:</label>
+        <select id="branch" name="branch">
+            <option value="all">all</option>
+            <option value="volvo">Volvo</option>
+            <option value="saab">Saab</option>
+            <option value="fiat">Fiat</option>
+            <option value="audi">Audi</option>
+        </select>
+        <label for="end-date">Date:</label>
+        <input type="date" id="end-date" name="end-date">
+        <button onclick="performSearch()">Search</button>
+    </form>
+    <br><br>
+
+    <table>
+        <thead>
+            <tr>
+            <th>Column 1</th>
+            <th>Column 2</th>
+            <th>Column 3</th>
+            <th>Column 4</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% for (let i = 0; i < data.length; i++) { %>
+            <tr>
+                <td><%= data[i].antecedent %></td>
+                <td><%= data[i].consequent %></td>
+                <td><%= data[i].support %></td>
+                <td><%= data[i].confidence %></td>
+            </tr>
+            <% } %>
+        </tbody>
+    </table>
+</div>

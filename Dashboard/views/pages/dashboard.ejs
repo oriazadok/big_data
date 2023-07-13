@@ -1,0 +1,59 @@
+<!--
+=========================================================
+Material Dashboard - v2.1.2
+=========================================================
+
+Product Page: https://www.creative-tim.com/product/material-dashboard
+Copyright 2020 Creative Tim (https://www.creative-tim.com)
+Coded by Creative Tim
+
+=========================================================
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software. -->
+<!DOCTYPE html>
+<html>
+
+<head>
+  <%- include("../partials/headers") %>
+  
+  <!--ariel ws-->
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    var socket = io.connect();
+    function setWs() {
+      socket.on('newdata', function (msg) {
+        var element = document.getElementById(msg.districtId);
+        element.innerText = msg.value;
+      })
+    }
+  </script>
+  <!--ariel ws -->
+</head>
+
+<body class="" onload="setWs()">
+  <div class="wrapper ">
+    <%- include("../partials/sidebar") %>
+      <div class="main-panel">
+          <div class="content">
+            <div class="container-fluid">
+              <div class="row">
+                <!--start-->
+                <% cards.forEach(function(card) { %>
+                  <%- include("../partials/card",card) %>
+                    <% }); %>
+                      <!--end-->
+              </div>
+              <div class="row">
+                <%- include("../partials/graphs") %>
+              </div>
+              <div class="row">
+                <%- include("../partials/taskscard") %>
+                  <%- include("../partials/employeeslist") %>
+              </div>
+            </div>
+          </div>
+      </div>
+  </div>
+  <%- include("../partials/dashcode") %>
+</body>
+
+</html>

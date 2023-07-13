@@ -1,0 +1,31 @@
+<div>
+    <h2>מציאת חוקי קשר</h2>
+    <div>
+        <label for="start-date">Start Date:</label>
+        <input type="date" id="start-date" name="start-date">
+        <label for="end-date">End Date:</label>
+        <input type="date" id="end-date" name="end-date">
+        <button onclick="applyFilter()">Apply</button>
+    </div>
+    <br>
+    <table>
+    <thead>
+        <tr>
+        <th>Antecedent</th>
+        <th>Consequent</th>
+        <th>Support(%)</th>
+        <th>confidence (%)</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% for (let i = 0; i < data.length; i++) { %>
+            <tr>
+              <td><%= data[i].antecedent %></td>
+              <td><%= data[i].consequent %></td>
+              <td><%= data[i].support %></td>
+              <td><%= data[i].confidence %></td>
+            </tr>
+          <% } %>
+    </tbody>
+    </table>
+</div>
