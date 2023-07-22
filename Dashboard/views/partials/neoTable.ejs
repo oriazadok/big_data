@@ -1,0 +1,18 @@
+<table>
+  <thead>
+    <tr>
+      <% next_24.fields.forEach(field => { %>
+        <th><%= field %></th>
+      <% }); %>
+    </tr>
+  </thead>
+  <tbody>
+    <% next_24.data.forEach(row => { %>
+      <tr>
+        <% row.forEach(value => { %>
+          <td><%= value %></td>
+        <% }); %>
+      </tr>
+    <% }); %>
+  </tbody>
+</table>

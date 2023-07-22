@@ -1,0 +1,68 @@
+<div id="myPlotA" style="width:100%;max-width:700px"></div>
+
+<% 
+// Get the current date and a week ago from today
+const currentDate = new Date();
+const oneWeekAgo = new Date();
+oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+
+// Create an empty array to store the filtered elements
+const filteredData = [];
+
+// Loop through the dataFromES array and extract elements within the date range
+for (let i = 0; i < dataFromES.length; i++) {
+  const dateFromElement = new Date(dataFromES[i].date);
+
+  // Check if the date from the element is within the last week
+  if (dateFromElement >= oneWeekAgo && dateFromElement <= currentDate) {
+    // Push the matching element into the filteredData array
+    filteredData.push(dataFromES[i]);
+  }
+}
+
+// Sort the filteredData array based on the date in ascending order
+filteredData.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+%>
+
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<script>
+  // Parse the filteredData array from the server-side
+  const filteredData = <%- JSON.stringify(filteredData) %>;
+
+  // Create arrays to store x and y data
+  const xArrayLayOut = [];
+  const xArray = [];
+  const yArray = [];
+
+  // Loop through the filteredData array and populate xArray and yArray
+  for (let i = 0; i < filteredData.length; i++) {
+    const dateObject = new Date(filteredData[i].date);
+
+    const timeArray = filteredData[i].time.split(':');
+    const hour = parseInt(timeArray[0]);
+    
+    const xValue = dateObject.toISOString(); // ISO string format (e.g., "2023-07-19T08:30:00.000Z")
+
+    xArrayLayOut.push(xValue);
+    xArray.push(xValue + (hour / 24));
+    yArray.push(filteredData[i].urgency);
+  }
+
+  // Define Data using the arrays created above
+  const data = [{
+    x: xArray,
+    y: yArray,
+    mode: "lines"
+  }];
+
+  // Define Layout
+  const layout = {
+    xaxis: { range: [xArrayLayOut[0], xArrayLayOut[xArray.length - 1]] }, // Assuming days range from 1 to 31
+    yaxis: { range: [0, 5], title: "Urgency" }, // Assuming urgency ranges from 0 to 5
+    title: "Urgency vs. Day of the Last Week"
+  };
+
+  // Display using Plotly
+  Plotly.newPlot("myPlotA", data, layout);
+</script>

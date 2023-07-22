@@ -1,0 +1,21 @@
+<div class="col-md-12">
+    <div class="card">
+      <div class="card-header card-header-primary">
+        <h4 class="card-title">Last Event Data</h4>
+        <p class="card-category">Details about the last event</p>
+      </div>
+      <div class="card-body table-responsive">
+        <table class="table table-hover">
+          <tbody>
+            <% for (const key in last_event) { %>
+              <tr>
+                <td><%= key %></td>
+                <td><%= last_event[key] %></td>
+              </tr>
+            <% } %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  

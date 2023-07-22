@@ -1,0 +1,34 @@
+<div class="sunDiv">
+    <h2 class="sunH2">Rise</h2>
+    <p><b>Azimuth:</b> <%= sunData.json.rise['Azimuth:'] %></p>
+    <p><b>Time:</b> <%= sunData.json.rise.time %></p>
+</div>
+
+<div class="sunDiv">
+    <h2 class="sunH2">Transit</h2>
+    <p><b>Max Altitude:</b> <%= sunData.json.transit['Max altitude:'] %></p>
+    <p><b>Time:</b> <%= sunData.json.transit.time %></p>
+</div>
+
+<div class="sunDiv" class="">
+    <h2 class="sunH2">Set</h2>
+    <p><b>Azimuth:</b> <%= sunData.json.set['Azimuth:'] %></p>
+    <p><b>Time:</b> <%= sunData.json.set.time %></p>
+</div>
+
+<div id="dateTimeDiv">
+    <h2 class="sunH2">Date And Time</h2>
+    <p id="currentDateTime"><%= sunData.currentDate %></p>
+</div>
+
+<script>
+    // JavaScript code to update current date and time every second
+    function updateDateTime() {
+        const dateTimeElement = document.getElementById('currentDateTime');
+        const currentDate = new Date().toLocaleString(); // Get the current date and time as a string
+        dateTimeElement.textContent = currentDate; // Update the content of the element with the new date and time
+    }
+
+    // Call the updateDateTime function every second (1000ms)
+    setInterval(updateDateTime, 1000);
+</script>

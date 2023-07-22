@@ -1,38 +1,140 @@
 <div class="content">
-    <form>
-    
-        <label for="start-date">Branch:</label>
-        <select id="branch" name="branch">
-            <option value="all">all</option>
-            <option value="volvo">Volvo</option>
-            <option value="saab">Saab</option>
-            <option value="fiat">Fiat</option>
-            <option value="audi">Audi</option>
-        </select>
-        <label for="end-date">Date:</label>
-        <input type="date" id="end-date" name="end-date">
-        <button onclick="performSearch()">Search</button>
+    <form id="searchForm" action="/searchEvents" method="POST">
+        <div>
+            <label for="planetarium">Planetarium:</label>
+            <select id="planetarium" name="planetarium">
+                <option value="choose">choose</option>
+                <option value="MMT">MMT</option>
+                <option value="Gemini Observatory Telescopes">Gemini Observatory Telescopes</option>
+                <option value="Very Large Telescope">Very Large Telescope</option>
+                <option value="Subaru Telescope">Subaru Telescope</option>
+                <option value="Large Binocular Telescope">Large Binocular Telescope</option>
+                <option value="Southern African Large Telescope">Southern African Large Telescope</option>
+                <option value="Keck 1 and 2">Keck 1 and 2</option>
+                <option value="Hobby-Eberly Telescope">Hobby-Eberly Telescope</option>
+                <option value="Gran Telescopio Canarias">Gran Telescopio Canarias</option>
+                <option value="The Giant Magellan Telescope">The Giant Magellan Telescope</option>
+                <option value="Thirty Meter Telescope">Thirty Meter Telescope</option>
+                <option value="European Extremely Large Telescope">European Extremely Large Telescope</option>
+            </select>
+
+            <label for="event_type">Event Type:</label>
+            <select id="event_type" name="events_type">
+                <option value="choose">choose</option>
+                <option value="GRB">GRB</option>
+                <option value="Apparent Brightness Rise">Apparent Brightness Rise</option>
+                <option value="UV Rise">UV Rise</option>
+                <option value="X-Ray Rise">X-Ray Rise</option>
+                <option value="Comet">Comet</option>
+            </select>
+
+            <label for="Title_HD">Title_HD:</label>
+            <select id="Title_HD" name="Title_HD">
+                <option value="choose">choose</option>
+                <% list.forEach((option) => { %>
+                    <option value="<%= option %>"><%= option %></option>
+                <% }); %>
+            </select>
+        </div>
+        <br><br><br><br>
+
+        
+
+        <div>
+            <label for="start-date">Start Date:</label>
+            <input type="date" id="start-date" name="start-date">
+
+            <label for="end-date">End Date:</label>
+            <input type="date" id="end-date" name="end-date">
+            <button type="submit">Search</button>
+        </div>
+        <br><br>
+
     </form>
     <br><br>
 
     <table>
         <thead>
             <tr>
-            <th>Column 1</th>
-            <th>Column 2</th>
-            <th>Column 3</th>
-            <th>Column 4</th>
+                <% for (let i = 0; i < titels.length; i++) { %>
+                    <th><%= titels[i] %></th>
+                <% } %>
             </tr>
         </thead>
         <tbody>
-            <% for (let i = 0; i < data.length; i++) { %>
-            <tr>
-                <td><%= data[i].antecedent %></td>
-                <td><%= data[i].consequent %></td>
-                <td><%= data[i].support %></td>
-                <td><%= data[i].confidence %></td>
-            </tr>
+            <% for (let i = 0; i < dataFromES.length; i++) { %>
+                <tr>
+                    <% for (let j = 0; j < titels.length; j++) { %>
+                        <td><%= dataFromES[i][titels[j]] %></td>
+                    <% } %>
+                </tr>
             <% } %>
         </tbody>
     </table>
 </div>
+
+<!-- Your EJS template file (pages/searchEvents.ejs) -->
+<!-- ... (previous HTML code) ... -->
+
+<script>
+    document.getElementById('searchForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+  
+      const startDate = document.getElementById('start-date').value;
+      const endDate = document.getElementById('end-date').value;
+  
+      // Check if the start date and end date are filled
+      if (!startDate || !endDate) {
+        alert('Please fill both Start Date and End Date before submitting.');
+        return;
+      }
+  
+      const form = event.target;
+      const formData = new FormData(form);
+  
+      // Convert form data to JSON
+      const jsonData = {};
+      formData.forEach((value, key) => {
+        jsonData[key] = value;
+      });
+
+      console.log("jsonDaya: ", jsonData);
+  
+      // Send the JSON data to the server using the fetch API
+      fetch('/searchEvents', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(jsonData),
+      })
+      .then(response => response.json()) // Parse the JSON response
+      .then(updatedData => {
+        // Update the table data based on the received JSON data
+        const tableBody = document.querySelector('tbody');
+        tableBody.innerHTML = ''; // Clear existing rows
+  
+        updatedData.forEach(item => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${item.id}</td>
+            <td>${item.planetarium}</td>
+            <td>${item.events_type}</td>
+            <td>${item.Title_HD}</td>
+            <td>${item.RA}</td>
+            <td>${item.dec}</td>
+            <td>${item.date}</td>
+            <td>${item.time}</td>
+            <td>${item.urgency}</td>
+          `;
+          tableBody.appendChild(row);
+        });
+  
+        console.log('Table data updated successfully.');
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+    });
+  </script>
+  

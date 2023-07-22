@@ -1,0 +1,54 @@
+<div id="myPlotC" style="width:100%;max-width:700px"></div>
+
+<% 
+
+const datesC = [];
+const diam = [];
+// Get the current date and a week ago from today
+for (let i = 0; i < extractedSecondData.length; i++) {
+    datesC.push(new Date(extractedSecondData[i].date));  
+    diam.push(extractedSecondData[i].apparentDiameter);
+}
+
+%>
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<script>
+  // Parse the filteredDataB array from the server-side
+  const datesC = <%- JSON.stringify(datesC) %>;
+  const diam = <%- JSON.stringify(diam) %>;
+
+  // Create arrays to store x and y dataC
+  const xArrayLayOutC = [];
+  const xArrayC = [];
+  const yArrayC = [];
+    
+  // Loop through the filteredDataB array and populate xArrayC and yArrayC
+  for (let i = 0; i < datesC.length; i++) {
+    const dateObject = new Date(datesC[i]);
+
+    const xValue = dateObject.toISOString(); // ISO string format (e.g., "2023-07-19T08:30:00.000Z")
+
+    xArrayLayOutC.push(xValue);
+    xArrayC.push(xValue);
+    yArrayC.push(diam[i]);
+  }
+
+  console.log(xArrayC);
+
+  // Define Data using the arrays created above
+  const dataC = [{
+    x: xArrayC,
+    y: yArrayC,
+    mode: "lines"
+  }];
+
+  // Define Layout
+  const layoutC = {
+    xaxis: { range: [xArrayLayOutC[0], xArrayLayOutC[xArrayC.length - 1]] }, // Assuming days range from 1 to 31
+    yaxis: { range: [yArrayC[0], yArrayC[yArrayC.length - 1]], title: "Urgency" }, // Assuming urgency ranges from 0 to 5
+    title: "Urgency vs. Day of the Last Week"
+  };
+
+  // Display using Plotly
+  Plotly.newPlot("myPlotC", dataC, layoutC);
+</script>

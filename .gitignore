@@ -1,7 +1,16 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
+/Dashboard/.idea
 /Dashboard/node_modules
+/Dashboard/venv
+
+/ElasticSearch/__pycache__
+/ElasticSearch/.idea
+
+/Simulator/.idea
+
+
 /node_modules
 /.pnp
 .pnp.js

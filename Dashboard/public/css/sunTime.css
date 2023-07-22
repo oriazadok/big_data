@@ -1,0 +1,50 @@
+/* CSS for all the divs */
+.sunDiv {
+    padding: 10px;
+    margin: 10px;
+    border: 1px solid black;
+    border-radius: 10px;
+    background-color: #dfd7d7;
+    width: 23%;
+    font-size: 20px;
+  }
+  
+.sunH2 {
+    text-decoration: underline; 
+}
+  
+#dateTimeDiv {
+    padding: 15px;
+    margin: 10px;
+    border: 1px solid black;
+    border-radius: 10px;
+    background-color: #dae4dc;
+    font-weight: bold;
+    width: 23%;
+    text-align: center;
+}
+
+#currentDateTime {
+    font-size: 20px;
+}
+  
+
+
+/* CSS for the sunTime partial */
+/* #dateTimeDiv {
+    background-color: #f0f0f0;
+    font-weight: bold;
+    padding: 10px;
+    margin: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+  
+#dateTimeDiv h2 {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+#dateTimeDiv p {
+    margin: 5px 0;
+} */

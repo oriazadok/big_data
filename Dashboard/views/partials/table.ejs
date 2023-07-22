@@ -1,0 +1,22 @@
+<div>
+    
+    <table>
+        <thead>
+            <tr>
+                <% const keys = Object.keys(table[0]); %>
+                <% keys.forEach(function (key) { %>
+                    <th><%= key %></th>
+                <% }); %>
+            </tr>
+        </thead>
+        <tbody>
+            <% table.forEach(function (item) { %>
+                <tr>
+                    <% keys.forEach(function (key) { %>
+                        <td><%= item[key] %></td>
+                    <% }); %>
+                </tr>
+            <% }); %>
+        </tbody>
+    </table>
+</div>

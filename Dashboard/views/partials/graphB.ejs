@@ -1,0 +1,64 @@
+<div id="myPlotB" style="width:100%;max-width:700px"></div>
+
+<% 
+
+const dates = [];
+const hours = [];
+const size = [];
+// Get the current date and a week ago from today
+for (let i = 0; i < filteredData.length; i++) {
+    dates.push(new Date(filteredData[i][0].split(" ")[0]));  
+    const timeArray = filteredData[i][0].split(' ')[1];
+    hours.push(parseInt(timeArray[0]));
+    size.push(parseInt(filteredData[i][1]))
+}
+
+%>
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<script>
+  // Parse the filteredDataB array from the server-side
+  const dates = <%- JSON.stringify(dates) %>;
+  const hours = <%- JSON.stringify(hours) %>;
+  const size = <%- JSON.stringify(size) %>;
+
+  // Create arrays to store x and y dataB
+  const xArrayLayOutB = [];
+  const xArrayB = [];
+  const yArrayB = [];
+    
+  // Loop through the filteredDataB array and populate xArrayB and yArrayB
+  for (let i = 0; i < dates.length; i++) {
+    const dateObject = new Date(dates[i]);
+
+    const xValue = dateObject.toISOString(); // ISO string format (e.g., "2023-07-19T08:30:00.000Z")
+
+    // console.log("xvaaaaaaaaa: ", dates[i]);
+    // console.log("xvaaaaaaaaa222: ", xValue);
+
+    xArrayLayOutB.push(xValue);
+    xArrayB.push(xValue + (hours[i] / 24));
+    yArrayB.push(size[i]);
+  }
+
+//   console.log("xvcvadvacl: ", dates.length);
+//   console.log("xval: ", xArrayB);
+//   console.log("xval: ", yArrayB);
+  
+
+  // Define Data using the arrays created above
+  const dataB = [{
+    x: xArrayB,
+    y: yArrayB,
+    mode: "lines"
+  }];
+
+  // Define Layout
+  const layoutB = {
+    xaxis: { range: [xArrayLayOutB[0], xArrayLayOutB[xArrayB.length - 1]] }, // Assuming days range from 1 to 31
+    yaxis: { range: [yArrayB[0], yArrayB[yArrayB.length - 1]], title: "Urgency" }, // Assuming urgency ranges from 0 to 5
+    title: "Urgency vs. Day of the Last Week"
+  };
+
+  // Display using Plotly
+  Plotly.newPlot("myPlotB", dataB, layoutB);
+</script>

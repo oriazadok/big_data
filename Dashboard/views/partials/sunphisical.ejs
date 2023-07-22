@@ -1,0 +1,33 @@
+<!-- sunphisical.ejs -->
+<div class="col-lg-6 col-md-12">
+    <div class="card">
+      <div class="card-header card-header-tabs card-header-warning">
+        <h4 class="card-title">Sun Physical Parameters</h4>
+        <p class="card-category">Data from extractedFirstData</p>
+      </div>
+      <div class="card-body table-responsive">
+        <table class="table table-hover">
+          <thead class="text-warning">
+            <tr>
+              <% if (extractedFirstData.length > 0) { %>
+                <% const firstElement = extractedFirstData[0]; %>
+                <% for (const key in firstElement) { %>
+                  <th><%= key %></th>
+                <% } %>
+              <% } %>
+            </tr>
+          </thead>
+          <tbody>
+            <% for (const item of extractedFirstData) { %>
+              <tr>
+                <% for (const key in item) { %>
+                  <td><%= item[key] %></td>
+                <% } %>
+              </tr>
+            <% } %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  
