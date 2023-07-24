@@ -8,6 +8,11 @@ const { spawn } = require('child_process');
 const Redis = require('ioredis');
 const redis = new Redis();
 
+// mongo
+const { MongoClient, ObjectID } = require('mongodb');
+
+
+
 const app = express();
 app.use(express.static('public'))
 app.set('view engine', 'ejs')
@@ -413,6 +418,7 @@ app.get('/', async (req, res) => {
   const scrapy = await scrapping();
   const last_month = await lastMonth();
   const dataFromES = await readElasticSearch();
+  // console.log("dataFromES: ", dataFromES);
 
   const filteredData = last_month.data.map(item => [item[3], item[10]]);
   filteredData.sort(compareDates);
@@ -462,7 +468,6 @@ app.get('/searchEvents', async (req, res) => {
   list.sort();
   const titels = ["id", "planetarium", "events_type", "Title_HD", "RA", "DEC", "date", "time", "urgency"];
   const dataFromES = await readElasticSearch();
-  // console.log(dataFromES);
 
   res.render("pages/searchEvents", {list, titels, dataFromES});
 });
@@ -500,12 +505,90 @@ app.get('/getStar', async (req, res) => {
 
 
 
-app.get('/check', async (req, res) => {
-  // const dataFromES = await eses();
-  // console.log("ret4tre: ", dataFromES);
-  res.json(dataFromES);
-  // res.render("pages/check", dataFromES);
-})
+app.get('/mongo', async (req, res) => {
+  const connection_string = "mongodb+srv://nivk99:turhvubhc@cluster0.nebl68s.mongodb.net/";
+  const dbName = "my_database";
+  const collectionName = "my_collection";
+
+  try {
+    const client = await MongoClient.connect(connection_string, { useUnifiedTopology: true });
+    console.log("Connected successfully!");
+
+    const db = client.db(dbName);
+    const collection = db.collection(collectionName);
+
+    const dataToInsert = (await scrapping()).extractedSecondData;
+
+    // Sample data to insert into the collection
+    // const sampleData = [
+    //   { "name": "Alice", "age": 30, "city": "New York" },
+    //   { "name": "Bob", "age": 25, "city": "Los Angeles" },
+    //   { "name": "Charlie", "age": 35, "city": "Chicago" }
+    // ];
+
+    // Insert the sample data into the collection
+    const response = await collection.insertMany(dataToInsert);
+    console.log("Sample data inserted into the collection.");
+    res.json(response);
+  } catch (err) {
+    console.error("Could not connect to MongoDB:", err);
+    res.status(500).json({ error: "Could not connect to MongoDB" });
+  }
+});
+// Querying data from the collection
+// app.get('/query', (req, res) => {
+//   collection.find({ "age": { "$gt": 28 } }).toArray()
+//     .then(results => {
+//       console.log("Results of the query:");
+//       results.forEach(doc => console.log(doc));
+//       res.json(results);
+//     })
+//     .catch(err => {
+//       console.error("Error querying data:", err);
+//       res.status(500).json({ error: "An error occurred while querying data." });
+//     });
+// });
+// // Update data in the collection
+// app.put('/update/:id', (req, res) => {
+//   const id = req.params.id;
+//   const newData = req.body;
+
+//   collection.updateOne({ "_id": ObjectID(id) }, { "$set": newData })
+//     .then(result => {
+//       if (result.modifiedCount > 0) {
+//         console.log("Data updated successfully!");
+//         res.json({ message: "Data updated successfully!" });
+//       } else {
+//         console.log("No document found with the given ID.");
+//         res.status(404).json({ error: "No document found with the given ID." });
+//       }
+//     })
+//     .catch(err => {
+//       console.error("Error updating data:", err);
+//       res.status(500).json({ error: "An error occurred while updating data." });
+//     });
+// });
+// // Deleting data from the collection
+// app.delete('/delete/:id', (req, res) => {
+//   const id = req.params.id;
+
+//   collection.deleteOne({ "_id": ObjectID(id) })
+//     .then(result => {
+//       if (result.deletedCount > 0) {
+//         console.log("Data deleted successfully!");
+//         res.json({ message: "Data deleted successfully!" });
+//       } else {
+//         console.log("No document found with the given ID.");
+//         res.status(404).json({ error: "No document found with the given ID." });
+//       }
+//     })
+//     .catch(err => {
+//       console.error("Error deleting data:", err);
+//       res.status(500).json({ error: "An error occurred while deleting data." });
+//     });
+// });
+
+
 
 const server = express()
   .use(app)

@@ -20,8 +20,26 @@ for (let i = 0; i < dataFromES.length; i++) {
   }
 }
 
+
 // Sort the filteredData array based on the date in ascending order
-filteredData.sort((a, b) => new Date(a.date) - new Date(b.date));
+filteredData.sort((a, b) => {
+  const dateComparison = new Date(a.date) - new Date(b.date);
+  if (dateComparison !== 0) {
+    // If the dates are different, sort by date
+    return dateComparison;
+  } else {
+    // If the dates are the same, sort by time
+    const timeA = a.time.split(":");
+    const timeB = b.time.split(":");
+    const timeComparison = parseInt(timeA[0]) - parseInt(timeB[0]);
+    if (timeComparison !== 0) {
+      return timeComparison;
+    } else {
+      // If the hours are the same, sort by minutes
+      return parseInt(timeA[1]) - parseInt(timeB[1]);
+    }
+  }
+});
 
 %>
 

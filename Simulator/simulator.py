@@ -4,11 +4,7 @@ import random
 import datetime
 from kafka import KafkaProducer
 import time
-import socket
 
-
-
-import random
 from datetime import datetime, timezone
 
 def date_and_time_r():
@@ -101,7 +97,7 @@ def create_msg():
     Title_HD = random_item['Title HD']
 
     msg = {'date': date[0],'time': date[1], 'planetarium': planetarium, 'events_type': events_type, 'urgency': urgency, 'id': id, 'RA': ra,
-           'dec': dec, 'Title_HD': Title_HD}
+           'DEC': dec, 'Title_HD': Title_HD}
     return msg
 
 
@@ -115,14 +111,23 @@ def get_partition(key, all, available):
 
 def kafka_producer():
     # Create a Kafka producer
-    producer = KafkaProducer(bootstrap_servers=['localhost:9092'], value_serializer=json_ser, partitioner=get_partition)
+    # producer = KafkaProducer(bootstrap_servers=['localhost:9092'], value_serializer=json_ser, partitioner=get_partition)
+    producer = KafkaProducer(
+            bootstrap_servers=['tough-ewe-9441-eu1-kafka.upstash.io:9092'],
+            sasl_mechanism='SCRAM-SHA-256',
+            security_protocol='SASL_SSL',
+            sasl_plain_username='dG91Z2gtZXdlLTk0NDEktvsDhIZ6n36KijOs8dYQcsvTKRW5q2rfAHn6t6JpntA',
+            sasl_plain_password='1841bd9acc424db5a8b06eeab2f87567',
+            )
 
     # for _ in range(100):
     while True:
         m = create_msg()
         print(m)
-        producer.send("event13", m)
-        time.sleep(4)
+        serialized_msg = json_ser(m)  # Serialize the message value to bytes
+        producer.send("events", value=serialized_msg)  # Send the serialized message
+        # producer.send("event16", m)
+        time.sleep(3)
 
 
 if __name__ == '__main__':
