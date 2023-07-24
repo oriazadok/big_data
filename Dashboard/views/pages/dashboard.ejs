@@ -4,6 +4,7 @@
   <head>
     <%- include("../partials/headers") %>
     <link rel="stylesheet" href="/css/sunTime.css">
+    <link rel="stylesheet" href="/css/graph.css">
     
     <!--ariel ws-->
     <script src="/socket.io/socket.io.js"></script>
@@ -23,22 +24,67 @@
     <div class="wrapper ">
       <%- include("../partials/sidebar") %>
         <div class="main-panel">
-            <div class="content">
+            <!-- <div class="content"> -->
               <div class="container-fluid">
+                <br/><br/>
+                <h1><b>The Sky Live</b></h1>
                 <div class="row">
                   <%- include("../partials/sunTime"), { sunData: sunData } %>
                 </div>
-                <div class="row">
-                  <%- include("../partials/graphA"), {dataFromES} %>
-                  <%- include("../partials/graphB"), {filteredData} %>
-                  <%- include("../partials/graphC"), {extractedSecondData} %>
-                  <%- include("../partials/sunphisical"), {extractedFirstData} %>
+                <div class="graph-row">
+                  <div class="graph">
+                    <h1>Graph of data from ES last week</h1>
+                    <div class="graph-content">
+                      <%- include("../partials/graphA"), {dataFromES} %>
+                    </div>
+                  </div>
+
+                  <div class="graph">
+                    <h1>Graph of data from nasa of the last month</h1>
+                    <div class="graph-content">
+                      <%- include("../partials/graphB"), {filteredData} %>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="graph-row">
+                  <div class="graph">
+                    <h1>Graph of data from Sky Live</h1> 
+                    <h1>The Sun 15 Days Ephemeris</h1>
+                    <div class="graph-content">
+                      <%- include("../partials/graphC"), {extractedSecondData} %>
+                    </div>
+                  </div>
+
+                  <div class="graph">
+                    <h1>Table Of Data From Sky Live</h1>
+                    <div class="graph-content">
+                      <%- include("../partials/sunphisical"), {extractedFirstData} %>
+                    </div>
+                  </div>
+
+                </div>
+
+                <div>
+                  
                   <%- include("../partials/lastEvent"), {last_event} %>
                 </div>
-                <img src="<%= images.sun %>" />
-                <img src="<%= images.sky %>" />
+                  
+                <div class="graph-row">
+                  <div>
+                    <h2><b>Today Sunspots Activity</b></h2>
+                    <img src="<%= images.sun %>" />
+                  </div>
+                  <div>
+                    <h2><b>The Sun Position and Finder Charts</b></h2>
+                    <img src="<%= images.sky %>" />
+                  </div>
+                </div>
+                <br/><br/><br/><br/>
+
+
               </div>
-            </div>
+            <!-- </div> -->
         </div>
     </div>
   </body>

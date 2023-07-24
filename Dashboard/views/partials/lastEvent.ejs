@@ -1,21 +1,27 @@
 <div class="col-md-12">
-    <div class="card">
-      <div class="card-header card-header-primary">
-        <h4 class="card-title">Last Event Data</h4>
-        <p class="card-category">Details about the last event</p>
-      </div>
-      <div class="card-body table-responsive">
-        <table class="table table-hover">
-          <tbody>
-            <% for (const key in last_event) { %>
+  <div class="card">
+    <div class="card-header card-header-primary">
+      <h4 class="card-title">Last Event Data</h4>
+      <p class="card-category">Details about the last event</p>
+    </div>
+    <div class="card-body table-responsive">
+      <table class="table table-hover">
+        <tbody>
+          <% for (const key in last_event) { %>
+            <% if (key === 'urgency' && last_event[key] >= 4) { %>
+              <tr style="background-color: rgb(255, 55, 0);">
+                <td><strong><%= key %></strong></td>
+                <td><strong><%= last_event[key] %></strong></td>
+              </tr>
+            <% } else { %>
               <tr>
                 <td><%= key %></td>
                 <td><%= last_event[key] %></td>
               </tr>
             <% } %>
-          </tbody>
-        </table>
-      </div>
+          <% } %>
+        </tbody>
+      </table>
     </div>
   </div>
-  
+</div>

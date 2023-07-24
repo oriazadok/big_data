@@ -1,0 +1,71 @@
+
+.graph {
+    /* margin: -5px; */
+    margin-left: 10px;
+    margin-bottom: 30px;
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  .graph-content {
+    flex: 1; /* Let the graph content take up all available space */
+  }
+  
+  .graph h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+  
+  .graph-row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 15px;
+  }
+  
+  .graph-row .graph {
+   
+    margin-right: 10px;
+  }
+  
+  .graph-row .graph:last-child {
+    margin-right: 0; /* Remove spacing for the last graph in the row */
+  }
+  
+  /* Add specific styles for each graph partial here */
+  /* .graphA, .graphB, .graphC, etc. */
+  
+  .sunphisical {
+    margin-left: 20px;
+  }
+  
+  .lastEvent {
+    /* Define styles for lastEvent partial here */
+  }
+  
+  /* Add styles for images if needed */
+  img {
+    width: 560px;
+    height: 560px;
+    margin: 10px;
+  }
+
+  h1, h2 {
+    text-align: center;
+  }
+
+  h1 {
+    /* padding: 10px; */
+    /* text-decoration: underline; */
+
+  }
+  
+  /* Customize the header and sidebar styles as needed */
+  /* .card-header-primary, .card-category, .card, etc. */
+  
+  /* Media query to make graphs appear side by side on larger screens */
+  @media (min-width: 768px) {
+    .graph-row .graph {
+      flex-basis: calc(50% - 20px); /* Two graphs in the same line with more spacing between them */
+    }
+  }
+  

@@ -7,7 +7,7 @@ body {
 
 .content {
     /* background-color: aquamarine; */
-    width: 1400px;
+    /* width: 1400px; */
 }
 
 h1 {
@@ -17,8 +17,8 @@ h1 {
 }
 
 div {
-  float: left;
-  padding: auto;
+  /* float: left;
+  padding: auto; */
 }
 
 form {
@@ -65,7 +65,37 @@ label {
   font-size: 20px;
 }
 
+/* Style for the table */
 table {
+  border-collapse: collapse;
+  width: 100%;
+  border: 2px solid purple; /* Purple border for the table */
+}
+
+/* Style for table headers (th) */
+th {
+  background-color: purple;
+  color: white;
+  padding: 12px;
+}
+
+/* Style for table cells (td) */
+td {
+  padding: 8px;
+  text-align: left;
+}
+
+/* Style for alternating row background colors */
+tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+/* Hover effect for table rows */
+tr:hover {
+  background-color: #e6ccff;
+}
+
+/* table {
     margin: -35;
     table-layout: fixed;
     width: 1200px;
@@ -73,52 +103,10 @@ table {
     border: 3px solid purple;
   }
   
-  /* thead th:nth-child(1) {
-    width: 30px;
-  }
-  
-  thead th:nth-child(2) {
-    width: 5px;
-  }
-  
-  thead th:nth-child(3) {
-    width: 30px;
-  }
-  
-  thead th:nth-child(4) {
-    width: 30px;
-  }
-  thead th:nth-child(5) {
-    width: 30px;
-  }
-  
-  thead th:nth-child(6) {
-    width: 30px;
-  }
-  
-  thead th:nth-child(7) {
-    width: 30px;
-  }
-  
-  thead th:nth-child(8) {
-    width: 30px;
-  }
-  thead th:nth-child(9) {
-    width: 30px;
-  }
-  
-  thead th:nth-child(10) {
-    width: 30px;
-  }
-  
-  thead th:nth-child(11) {
-    width: 30px;
-  } */
-  
   
   th,
   td {
     margin: 0;
     /* padding: 5px; */
-    /* width:  */
-  }
+    /* width:  
+  } */
