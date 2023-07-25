@@ -4,13 +4,17 @@ const cheerio = require('cheerio');
 const socketIO = require('socket.io');
 const { spawn } = require('child_process');
 
+// ws
+const WebSocket = require('ws');
+
 // redis
 const Redis = require('ioredis');
 const redis = new Redis();
 
 // mongo
-const { MongoClient, ObjectID } = require('mongodb');
-
+const { MongoClient } = require('mongodb');
+const moment = require('moment');
+const mongoConnectionString = 'mongodb+srv://nivk99:turhvubhc@cluster0.nebl68s.mongodb.net/';
 
 
 const app = express();
@@ -411,6 +415,52 @@ async function simbad(ra, dec) {
   });
 }
 
+// this function insert data to mongo
+async function insertDataToAtlas(dataToInsert) {
+  try {
+    // Connect to MongoDB Atlas
+    const client = await MongoClient.connect(mongoConnectionString, { useNewUrlParser: true, useUnifiedTopology: true });
+
+    // Get the database and collection
+    const db = client.db("my_database");
+    const collection = db.collection("my_collection");
+
+    const result = await collection.deleteMany({});
+    // console.log(`${result.deletedCount} documents deleted.`);
+
+    // Loop through the dataToInsert array and insert each object into the collection
+    for (const data of dataToInsert) {
+      // Convert the date to ISO format using moment.js
+      data.date = moment(data.date, 'YYYY MMM DD').toISOString();
+
+      // Insert the data object into the collection
+      await collection.insertOne(data);
+      // console.log('Data inserted successfully:', data);
+    }
+
+    // Close the connection to the database
+    client.close();
+  } catch (error) {
+    console.error('Error:', error);
+  }
+}
+
+// this function scrap data and execute insertDataToAtlas
+async function mongo() {
+  var dataToInsert = (await scrapping()).extractedSecondData;
+
+  dataToInsert = dataToInsert.map(function removeTabs(obj) {
+    for (var prop in obj) {
+      if (typeof obj[prop] === 'string') {
+        obj[prop] = obj[prop].replace(/\t/g, '');
+      }
+    }
+    return obj;
+  });
+
+  insertDataToAtlas(dataToInsert);
+};
+
 //////////////////////////////////////////
 // pages
 //////////////////////////////////////////
@@ -432,6 +482,7 @@ app.get('/', async (req, res) => {
       apparentDiameter: item.apparentDiameter.trim()
     };
   });
+
   const images = scrapy.images;
 
   const last_event = await getMostRecentDateTime();
@@ -453,6 +504,9 @@ app.get('/', async (req, res) => {
       images,
       last_event
     });
+
+    mongo();
+
   } catch (error) {
     console.error("Error in simbad function:", error);
     // Handle the error appropriately (e.g., send an error response)
@@ -504,93 +558,33 @@ app.get('/getStar', async (req, res) => {
 });
 
 
+// Create a WebSocket server
+const wss = new WebSocket.Server({ port: 8080 });
 
-app.get('/mongo', async (req, res) => {
-  const connection_string = "mongodb+srv://nivk99:turhvubhc@cluster0.nebl68s.mongodb.net/";
-  const dbName = "my_database";
-  const collectionName = "my_collection";
+function sendHelloMessage() {
+  wss.clients.forEach((client) => {
+    if (client.readyState === WebSocket.OPEN) {
+      getMostRecentDateTime()
+        .then((last_event) => {
+          // console.log("bitch: ", last_event);
+          if(last_event.urgency == 5) {
+            const message = JSON.stringify(last_event);
+            client.send(message);
+          }
+        })
+        .catch((error) => {
+          console.error('Error getting most recent date:', error.message);
+        });
+    }
+  });
+}
 
-  try {
-    const client = await MongoClient.connect(connection_string, { useUnifiedTopology: true });
-    console.log("Connected successfully!");
-
-    const db = client.db(dbName);
-    const collection = db.collection(collectionName);
-
-    const dataToInsert = (await scrapping()).extractedSecondData;
-
-    // Sample data to insert into the collection
-    // const sampleData = [
-    //   { "name": "Alice", "age": 30, "city": "New York" },
-    //   { "name": "Bob", "age": 25, "city": "Los Angeles" },
-    //   { "name": "Charlie", "age": 35, "city": "Chicago" }
-    // ];
-
-    // Insert the sample data into the collection
-    const response = await collection.insertMany(dataToInsert);
-    console.log("Sample data inserted into the collection.");
-    res.json(response);
-  } catch (err) {
-    console.error("Could not connect to MongoDB:", err);
-    res.status(500).json({ error: "Could not connect to MongoDB" });
-  }
-});
-// Querying data from the collection
-// app.get('/query', (req, res) => {
-//   collection.find({ "age": { "$gt": 28 } }).toArray()
-//     .then(results => {
-//       console.log("Results of the query:");
-//       results.forEach(doc => console.log(doc));
-//       res.json(results);
-//     })
-//     .catch(err => {
-//       console.error("Error querying data:", err);
-//       res.status(500).json({ error: "An error occurred while querying data." });
-//     });
-// });
-// // Update data in the collection
-// app.put('/update/:id', (req, res) => {
-//   const id = req.params.id;
-//   const newData = req.body;
-
-//   collection.updateOne({ "_id": ObjectID(id) }, { "$set": newData })
-//     .then(result => {
-//       if (result.modifiedCount > 0) {
-//         console.log("Data updated successfully!");
-//         res.json({ message: "Data updated successfully!" });
-//       } else {
-//         console.log("No document found with the given ID.");
-//         res.status(404).json({ error: "No document found with the given ID." });
-//       }
-//     })
-//     .catch(err => {
-//       console.error("Error updating data:", err);
-//       res.status(500).json({ error: "An error occurred while updating data." });
-//     });
-// });
-// // Deleting data from the collection
-// app.delete('/delete/:id', (req, res) => {
-//   const id = req.params.id;
-
-//   collection.deleteOne({ "_id": ObjectID(id) })
-//     .then(result => {
-//       if (result.deletedCount > 0) {
-//         console.log("Data deleted successfully!");
-//         res.json({ message: "Data deleted successfully!" });
-//       } else {
-//         console.log("No document found with the given ID.");
-//         res.status(404).json({ error: "No document found with the given ID." });
-//       }
-//     })
-//     .catch(err => {
-//       console.error("Error deleting data:", err);
-//       res.status(500).json({ error: "An error occurred while deleting data." });
-//     });
-// });
-
+// Send the message every 5 seconds
+setInterval(sendHelloMessage, 5000);
 
 
 const server = express()
   .use(app)
   .listen(3000, () => console.log(`Listening Socket on http://localhost:3000`));
-const io = socketIO(server);
+
+

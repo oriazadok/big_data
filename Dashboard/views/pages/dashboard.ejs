@@ -1,91 +1,165 @@
 <!DOCTYPE html>
 <html>
 
-  <head>
-    <%- include("../partials/headers") %>
-    <link rel="stylesheet" href="/css/sunTime.css">
-    <link rel="stylesheet" href="/css/graph.css">
-    
-    <!--ariel ws-->
-    <script src="/socket.io/socket.io.js"></script>
-    <script>
-      var socket = io.connect();
-      function setWs() {
-        socket.on('newdata', function (msg) {
-          var element = document.getElementById(msg.districtId);
-          element.innerText = msg.value;
-        })
+<head>
+  <title>WebSocket Message Receiver</title>
+  <%- include("../partials/headers") %>
+  <link rel="stylesheet" href="/css/sunTime.css">
+  <link rel="stylesheet" href="/css/graph.css">
+
+  <style>
+    /* Existing styles for the flashing window... */
+
+    /* CSS keyframes for the blinking border animation for the flashing window */
+    @keyframes blinking-border-red {
+      0%, 100% {
+        border-color: transparent; /* Start and end with a transparent border */
       }
-    </script>
-    <!--ariel ws -->
-  </head>
+      50% {
+        border-color: red; /* Midpoint with a red border color */
+      }
+    }
 
-  <body class="" onload="setWs()">
-    <div class="wrapper ">
-      <%- include("../partials/sidebar") %>
-        <div class="main-panel">
-            <!-- <div class="content"> -->
-              <div class="container-fluid">
-                <br/><br/>
-                <h1><b>The Sky Live</b></h1>
-                <div class="row">
-                  <%- include("../partials/sunTime"), { sunData: sunData } %>
-                </div>
-                <div class="graph-row">
-                  <div class="graph">
-                    <h1>Graph of data from ES last week</h1>
-                    <div class="graph-content">
-                      <%- include("../partials/graphA"), {dataFromES} %>
-                    </div>
-                  </div>
+    /* Style for the flashing window */
+    .flashing-window {
+      width: 500px; /* Update the width to your desired size */
+      height: 400px; /* Update the height to your desired size */
+      max-width: 90%; /* Set a maximum width to ensure it doesn't become too large */
+      max-height: 90%; /* Set a maximum height to ensure it doesn't become too large */
+      border: 2px solid transparent; /* Start with a transparent border */
+      background-color: lightgray;
+      text-align: center;
+      font-size: 18px;
+      display: none; /* Start with the window hidden */
 
-                  <div class="graph">
-                    <h1>Graph of data from nasa of the last month</h1>
-                    <div class="graph-content">
-                      <%- include("../partials/graphB"), {filteredData} %>
-                    </div>
-                  </div>
-                </div>
-                
-                <div class="graph-row">
-                  <div class="graph">
-                    <h1>Graph of data from Sky Live</h1> 
-                    <h1>The Sun 15 Days Ephemeris</h1>
-                    <div class="graph-content">
-                      <%- include("../partials/graphC"), {extractedSecondData} %>
-                    </div>
-                  </div>
+      /* Flexbox properties to center the window */
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 9999; /* Make sure it's above other content */
 
-                  <div class="graph">
-                    <h1>Table Of Data From Sky Live</h1>
-                    <div class="graph-content">
-                      <%- include("../partials/sunphisical"), {extractedFirstData} %>
-                    </div>
-                  </div>
+      /* Additional CSS styles for the flashing window */
+      padding: 20px; /* Add padding for better appearance */
+      border-radius: 10px; /* Add rounded corners */
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add a subtle shadow */
+      animation: blinking-border-red 1s infinite; /* Add the blinking border animation */
+     
+    }
+  </style>
 
-                </div>
+  <!-- WebSocket Script -->
+</head>
 
-                <div>
-                  
-                  <%- include("../partials/lastEvent"), {last_event} %>
-                </div>
-                  
-                <div class="graph-row">
-                  <div>
-                    <h2><b>Today Sunspots Activity</b></h2>
-                    <img src="<%= images.sun %>" />
-                  </div>
-                  <div>
-                    <h2><b>The Sun Position and Finder Charts</b></h2>
-                    <img src="<%= images.sky %>" />
-                  </div>
-                </div>
-                <br/><br/><br/><br/>
-
-
-              </div>
-            <!-- </div> -->
-        </div>
+<body class="">
+  <div class="wrapper ">
+    <div class="flashing-window" id="flashingWindow">
+      <!-- The received data will be displayed here -->
     </div>
-  </body>
+  
+    <%- include("../partials/sidebar") %>
+      <div class="main-panel">
+        <div class="container-fluid">
+          <br/><br/>
+          <h1><b>The Sky Live</b></h1>
+          <div class="row">
+            <%- include("../partials/sunTime"), { sunData: sunData } %>
+          </div>
+          <div class="graph-row">
+            <div class="graph">
+              <h1>Graph of data from ES last week</h1>
+              <div class="graph-content">
+                <%- include("../partials/graphA"), {dataFromES} %>
+              </div>
+            </div>
+
+            <div class="graph">
+              <h1>Graph of data from nasa of the last month</h1>
+              <div class="graph-content">
+                <%- include("../partials/graphB"), {filteredData} %>
+              </div>
+            </div>
+          </div>
+
+          <div class="graph-row">
+            <div class="graph">
+              <h1>Graph of data from Sky Live</h1> 
+              <h1>The Sun 15 Days Ephemeris</h1>
+              <div class="graph-content">
+                <%- include("../partials/graphC"), {extractedSecondData} %>
+              </div>
+            </div>
+
+            <div class="graph">
+              <h1>Table Of Data From Sky Live</h1>
+              <div class="graph-content">
+                <%- include("../partials/sunphisical"), {extractedFirstData} %>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <!-- Flashing window to display the received data -->
+            <div class="flashing-window" id="flashingWindow">
+              <!-- The received data will be displayed here -->
+            </div>
+          </div>
+
+          <div class="graph-row">
+            <div>
+              <h2><b>Today Sunspots Activity</b></h2>
+              <img src="<%= images.sun %>" />
+            </div>
+            <div>
+              <h2><b>The Sun Position and Finder Charts</b></h2>
+              <img src="<%= images.sky %>" />
+            </div>
+          </div>
+          <br/><br/><br/><br/>
+        </div>
+      </div>
+  </div>
+
+  <script>
+    const socket = new WebSocket('ws://localhost:8080');
+
+    // When the WebSocket connection is established
+    socket.onopen = () => {
+      console.log('WebSocket connection established.');
+    };
+
+    // When a message is received from the WebSocket server
+    socket.onmessage = (event) => {
+      const message = JSON.parse(event.data);
+      console.log('Received message:', message);
+
+      // Get the flashing window element
+      const flashingWindow = document.getElementById('flashingWindow');
+
+      // Generate the HTML for all properties of the data object
+      let htmlContent = '';
+      htmlContent += `<h2>Attention</h2>`;
+      for (const [key, value] of Object.entries(message)) {
+        htmlContent += `<p>${key}: ${value}</p>`;
+      }
+
+      // Update the content of the flashing window with the generated HTML
+      flashingWindow.innerHTML = htmlContent;
+
+      // Show the flashing window
+      flashingWindow.style.display = 'block';
+
+      // After a short delay, hide the flashing window to create the flashing effect
+      setTimeout(() => {
+        flashingWindow.style.display = 'none';
+      }, 2500); // Adjust the duration of the display based on your preference (e.g., 1000ms = 1 second)
+    };
+
+    // Handle any errors that occur during the WebSocket connection
+    socket.onerror = (error) => {
+      console.error('WebSocket error:', error);
+    };
+  </script>
+</body>
+
 </html>
