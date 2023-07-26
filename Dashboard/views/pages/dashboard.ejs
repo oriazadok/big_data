@@ -44,8 +44,8 @@
       border-radius: 10px; /* Add rounded corners */
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add a subtle shadow */
       animation: blinking-border-red 1s infinite; /* Add the blinking border animation */
-     
     }
+    
   </style>
 
   <!-- WebSocket Script -->
@@ -103,6 +103,10 @@
             <div class="flashing-window" id="flashingWindow">
               <!-- The received data will be displayed here -->
             </div>
+          </div>
+
+          <div>    
+            <%- include("../partials/lastEvent"), {last_event} %>
           </div>
 
           <div class="graph-row">

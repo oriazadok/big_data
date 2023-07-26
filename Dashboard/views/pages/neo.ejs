@@ -15,6 +15,24 @@ The above copyright notice and this permission notice shall be included in all c
 <head>
   <%- include("../partials/headers") %>
   <link rel="stylesheet" href="/css/input_table.css">
+  <style>
+    /* Add these styles to your existing CSS file or create a new one and link it to your HTML */
+  
+    .data-table-container {
+      margin-top: 20px;
+    }
+  
+    .no-data-message {
+      padding: 20px;
+      text-align: center;
+      font-size: 18px;
+      color: #555;
+      background-color: #f9f9f9;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+  </style>
     <!--ariel ws-->
     <script src="/socket.io/socket.io.js"></script>
     <script>

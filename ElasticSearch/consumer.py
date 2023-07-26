@@ -2,7 +2,7 @@ from kafka import KafkaConsumer
 import json
 
 from insertElasticSearch import insert
-topic = 'events'
+topic = 'events2023'
 
 def main():
     # consumer = KafkaConsumer("event16", bootstrap_servers='localhost:9092', auto_offset_reset='earliest')

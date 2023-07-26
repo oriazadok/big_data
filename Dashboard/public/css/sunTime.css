@@ -4,7 +4,8 @@
     margin: 10px;
     border: 1px solid black;
     border-radius: 10px;
-    background-color: #dfd7d7;
+    background-color: #cb0ca2;
+    color: black;
     width: 23%;
     font-size: 20px;
   }
@@ -18,7 +19,7 @@
     margin: 10px;
     border: 1px solid black;
     border-radius: 10px;
-    background-color: #dae4dc;
+    background-color: rgb(177, 67, 168);;
     font-weight: bold;
     width: 23%;
     text-align: center;

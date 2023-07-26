@@ -1,18 +1,24 @@
-<table>
-  <thead>
-    <tr>
-      <% next_24.fields.forEach(field => { %>
-        <th><%= field %></th>
-      <% }); %>
-    </tr>
-  </thead>
-  <tbody>
-    <% next_24.data.forEach(row => { %>
-      <tr>
-        <% row.forEach(value => { %>
-          <td><%= value %></td>
+<div class="data-table-container">
+  <% if (next_24 && next_24.data && next_24.data.length > 0) { %>
+    <table>
+      <thead>
+        <tr>
+          <% next_24.fields.forEach(field => { %>
+            <th><%= field %></th>
+          <% }); %>
+        </tr>
+      </thead>
+      <tbody>
+        <% next_24.data.forEach(row => { %>
+          <tr>
+            <% row.forEach(value => { %>
+              <td><%= value %></td>
+            <% }); %>
+          </tr>
         <% }); %>
-      </tr>
-    <% }); %>
-  </tbody>
-</table>
+      </tbody>
+    </table>
+  <% } else { %>
+    <p class="no-data-message">No data to display.</p>
+  <% } %>
+</div>

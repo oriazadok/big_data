@@ -67,6 +67,7 @@ label {
 
 /* Style for the table */
 table {
+  background-color: white;
   border-collapse: collapse;
   width: 100%;
   border: 2px solid purple; /* Purple border for the table */
