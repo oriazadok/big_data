@@ -57,7 +57,6 @@ To enable full functionality, obtain API keys for the NASA Near-Earth Object Pro
 ![Image](./dashboard.PNG) 
 ![Image](./diagram.jpeg) 
 ![Image](./mvc.jpeg) 
-![Image](./video.mp4) 
 
 
 ## Video Demonstration
