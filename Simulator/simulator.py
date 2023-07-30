@@ -127,7 +127,7 @@ def kafka_producer():
         serialized_msg = json_ser(m)  # Serialize the message value to bytes
         producer.send("events2023", value=serialized_msg)  # Send the serialized message
         # producer.send("event16", m)
-        time.sleep(60)
+        time.sleep(20)
 
 
 if __name__ == '__main__':
