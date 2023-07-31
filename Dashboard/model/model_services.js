@@ -11,7 +11,7 @@ const redis = new Redis();
 // mongo
 const { MongoClient } = require('mongodb');
 const moment = require('moment');
-const mongoConnectionString = 'mongodb+srv://nivk99:turhvubhc@cluster0.nebl68s.mongodb.net/';
+const mongoConnectionString = // put your connection string;
 
 
 
@@ -287,9 +287,9 @@ async function buildQuery(query) {
 }
   
 async function readElasticSearch(query) { 
-const baseUrl = 'https://oriya-and-niv-2114271212.us-east-1.bonsaisearch.net:443';
-const username = '5gcyxc4555';
-const password = 'jn152uisr8';
+const baseUrl = // put your base url
+const username = // put your user name
+const password = // put your password
 
 // Creating a basic authentication header with the provided username and password
 const authHeader = `Basic ${Buffer.from(`${username}:${password}`).toString('base64')}`;
